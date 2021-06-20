@@ -8,7 +8,6 @@ public class DI {
   List<Float> negative;
   List<Boolean> isPositiveOver;
 
-
   public DI(List<Float> positive, List<Float> negative, List<Boolean> isPositiveOver) {
     this.positive = positive;
     this.negative = negative;
@@ -38,7 +37,4 @@ public class DI {
   public void setIsPositiveOver(List<Boolean> isPositiveOver) {
     this.isPositiveOver = isPositiveOver;
   }
-  
-
-  
 }

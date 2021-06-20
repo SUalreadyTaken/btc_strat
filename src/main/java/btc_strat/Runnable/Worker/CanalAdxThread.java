@@ -7,19 +7,20 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 import btc_strat.Model.Canal;
-import btc_strat.Model.InputModel;
-import btc_strat.Model.Trades;
+import btc_strat.Model.Inputs.CanalAdxInput;
+import btc_strat.Model.Trades.CanalAdxTrades;
+import btc_strat.Model.Trades.Trades;
 import btc_strat.Strats.AdxStrat;
 import btc_strat.Strats.StratUtils;
 
 public class CanalAdxThread implements Runnable {
-  private BlockingQueue<InputModel> queue;
+  private BlockingQueue<CanalAdxInput> queue;
   private BlockingQueue<Integer> queueOut;
   private final int poisonPill;
-  private List<Trades> bestCanalADXList;
+  private List<CanalAdxTrades> bestCanalADXList;
 
-  public CanalAdxThread(BlockingQueue<InputModel> queue, BlockingQueue<Integer> queueOut, List<Trades> bestCanalADXList,
-      int poisonPill) {
+  public CanalAdxThread(BlockingQueue<CanalAdxInput> queue, BlockingQueue<Integer> queueOut,
+      List<CanalAdxTrades> bestCanalADXList, int poisonPill) {
     this.queue = queue;
     this.poisonPill = poisonPill;
     this.queueOut = queueOut;
@@ -31,13 +32,12 @@ public class CanalAdxThread implements Runnable {
     StratUtils stratUtils = new StratUtils();
     try {
       while (true) {
-        InputModel apModel = queue.take();
+        CanalAdxInput apModel = queue.take();
         if (apModel.getPoisonPill() == this.poisonPill) {
           this.queueOut.put(1);
           return;
         }
-        
-        List<Trades> tmpBestList = new ArrayList<>();
+        List<CanalAdxTrades> tmpBestList = new ArrayList<>();
 
         List<Float> adxList = apModel.getAdxList();
 
@@ -45,28 +45,25 @@ public class CanalAdxThread implements Runnable {
           for (int exitThresh = 19; exitThresh < 40; exitThresh++) {
             for (int canalLookback = 7; canalLookback < apModel.getCanalLookback(); canalLookback++) {
               Canal canal = apModel.getCanalList().get(canalLookback);
-              for (int adxLookback = 7; adxLookback < apModel.getAdxLookback(); adxLookback++) {
-                List<Float> tmpProfitList = adxStrat.canalAdxExitProfitList(apModel.getWList(),canalLookback, adxLookback, 10, canal,
-                    apModel.getWholeKijunList().get(10), threshold, exitThresh, apModel.getAdx(), adxList, apModel.getDiList(),
+              for (int adxLookback = 7; adxLookback < apModel.getLookback(); adxLookback++) {
+                List<Float> tmpProfitList = adxStrat.canalAdxExitProfitList(apModel.getWilliamList(), canalLookback,
+                    adxLookback, canal, threshold, exitThresh, apModel.getAdx(), adxList, apModel.getDiList(),
                     apModel.getCandleList());
                 if (tmpProfitList.size() > 70) {
-                  // if (tmpBestList.size() > 1 && tmpProfitList.get(tmpProfitList.size() - 1) > 5.37) {
-                    float tmpConf = stratUtils.calcConf(tmpProfitList);
-                    if (tmpConf > 0.85) {
-                      Trades best = new Trades();
-                      best.setAdxLookback(adxLookback);
-                      best.setCanalLookback(canalLookback);
-                      best.setAdx(apModel.getAdx());
-                      best.setAdxThreshold(threshold);
-                      best.setAdxMinThreshold(exitThresh);
-                      best.setKijun(10);
-                      best.setProfit(tmpProfitList.get(tmpProfitList.size() - 1));
-                      best.setConf(tmpConf);
-                      best.setCanal(canal);
-                      tmpBestList.add(best);
-                    }
+                  float tmpConf = stratUtils.calcConf(tmpProfitList);
+                  if (tmpConf > 0.85) {
+                    CanalAdxTrades best = new CanalAdxTrades();
+                    best.setLookback(adxLookback);
+                    best.setCanalLookback(canalLookback);
+                    best.setAdx(apModel.getAdx());
+                    best.setLongThresh(threshold);
+                    best.setExitThresh(exitThresh);
+                    best.setProfit(tmpProfitList.get(tmpProfitList.size() - 1));
+                    best.setConf(tmpConf);
+                    best.setCanal(canal);
+                    tmpBestList.add(best);
                   }
-                // }
+                }
               }
             }
           }
@@ -80,9 +77,14 @@ public class CanalAdxThread implements Runnable {
         }
 
       }
-    } catch (InterruptedException e) {
+    } catch (Exception e) {
+      System.err.println("🧨 got error in thread put 1 in queue.. will miss a lot of samples");
+      try {
+        this.queueOut.put(1);
+      } catch (InterruptedException e1) {
+        e1.printStackTrace();
+      }
       Thread.currentThread().interrupt();
     }
   }
-
 }

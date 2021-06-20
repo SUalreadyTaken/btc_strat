@@ -6,86 +6,77 @@ import java.time.LocalDateTime;
  * Candlestick
  */
 public class Candlestick {
-    private LocalDateTime date;
-    private float open;
-    private float high;
-    private float low;
-    private float close;
-    private float volume;
+  private LocalDateTime date;
+  private float open;
+  private float high;
+  private float low;
+  private float close;
+  private float volume;
 
+  public Candlestick() {
+  }
 
-    public Candlestick() {
-    }
+  public Candlestick(LocalDateTime date, float open, float high, float low, float close, float volume) {
+    this.date = date;
+    this.open = open;
+    this.high = high;
+    this.low = low;
+    this.close = close;
+    this.volume = volume;
+  }
 
-    public Candlestick(LocalDateTime date, float open, float high, float low, float close, float volume) {
-        this.date = date;
-        this.open = open;
-        this.high = high;
-        this.low = low;
-        this.close = close;
-        this.volume = volume;
-    }
+  public LocalDateTime getDate() {
+    return this.date;
+  }
 
+  public void setDate(LocalDateTime date) {
+    this.date = date;
+  }
 
-    public LocalDateTime getDate() {
-        return this.date;
-    }
+  public float getOpen() {
+    return this.open;
+  }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
+  public void setOpen(float open) {
+    this.open = open;
+  }
 
-    public float getOpen() {
-        return this.open;
-    }
+  public float getHigh() {
+    return this.high;
+  }
 
-    public void setOpen(float open) {
-        this.open = open;
-    }
+  public void setHigh(float high) {
+    this.high = high;
+  }
 
-    public float getHigh() {
-        return this.high;
-    }
+  public float getLow() {
+    return this.low;
+  }
 
-    public void setHigh(float high) {
-        this.high = high;
-    }
+  public void setLow(float low) {
+    this.low = low;
+  }
 
-    public float getLow() {
-        return this.low;
-    }
+  public float getClose() {
+    return this.close;
+  }
 
-    public void setLow(float low) {
-        this.low = low;
-    }
+  public void setClose(float close) {
+    this.close = close;
+  }
 
-    public float getClose() {
-        return this.close;
-    }
+  public float getVolume() {
+    return this.volume;
+  }
 
-    public void setClose(float close) {
-        this.close = close;
-    }
+  public void setVolume(float volume) {
+    this.volume = volume;
+  }
 
-    public float getVolume() {
-        return this.volume;
-    }
+  @Override
+  public String toString() {
+    return "{" + " date='" + getDate() + "'" + ", open='" + getOpen() + "'" + ", high='" + getHigh() + "'" + ", low='"
+        + getLow() + "'" + ", close='" + getClose() + "'" + ", volume='" + getVolume() + "'" + "}";
+  }
 
-    public void setVolume(float volume) {
-        this.volume = volume;
-    }
-    
-
-    @Override
-    public String toString() {
-        return "{" +
-            " date='" + getDate() + "'" +
-            ", open='" + getOpen() + "'" +
-            ", high='" + getHigh() + "'" +
-            ", low='" + getLow() + "'" +
-            ", close='" + getClose() + "'" +
-            ", volume='" + getVolume() + "'" +
-            "}";
-    }
-        
 }

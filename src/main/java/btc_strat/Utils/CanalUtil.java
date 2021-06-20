@@ -16,7 +16,6 @@ public class CanalUtil {
     float low = 10000000;
     int highIndex = 0;
     int lowIndex = 0;
-    // List<Float> result = new ArrayList<>();
     List<Float> lowCanal = new ArrayList<>();
     List<Float> highCanal = new ArrayList<>();
 
@@ -69,19 +68,10 @@ public class CanalUtil {
           high = tmpHigh;
         }
       }
-      // float w = (high + low) / 2;
       lowCanal.add(low);
       highCanal.add(high);
     }
 
-    // List<Boolean> isOverCloseList = new ArrayList<>();
-    // for (int i = 0; i < result.size(); i++) {
-    // if (result.get(i) > candlestickList.get(i).getClose()) {
-    // isOverCloseList.add(true);
-    // } else {
-    // isOverCloseList.add(false);
-    // }
-    // }
     Canal result = new Canal(lowCanal, highCanal);
     return result;
   }

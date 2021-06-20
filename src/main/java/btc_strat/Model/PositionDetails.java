@@ -7,7 +7,8 @@ public class PositionDetails {
   float open;
   private LocalDateTime date;
 
-  public PositionDetails(){}
+  public PositionDetails() {
+  }
 
   public PositionDetails(boolean position, float open, LocalDateTime date) {
     this.position = position;
@@ -42,5 +43,4 @@ public class PositionDetails {
   public void setDate(LocalDateTime date) {
     this.date = date;
   }
-  
 }

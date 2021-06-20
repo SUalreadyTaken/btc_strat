@@ -5,14 +5,15 @@ import java.util.List;
 
 import btc_strat.Model.Candlestick;
 import btc_strat.Model.MRBands;
-import btc_strat.Model.Trades;
+import btc_strat.Model.Trades.MRBandsTrades;
 
 public class MRBandsStrat {
-
   StratUtils stratUtils = new StratUtils();
 
-  public MRBandsStrat(){}
-  
+  public MRBandsStrat() {
+  }
+
+  // mrbLongOnlyProfitList(mrb, window, inputModel.getCandleList());
   public List<Float> mrbLongOnlyProfitList(MRBands mrb, int window, List<Candlestick> candleList) {
     int start = (int) (window * 1.5);
     float profit = 1.0f;
@@ -23,7 +24,7 @@ public class MRBandsStrat {
         start = i;
         tmpOpen = candleList.get(i).getClose();
         break;
-      } else if (candleList.get(i).getClose() < mrb.getLowerValues().get(i)){
+      } else if (candleList.get(i).getClose() < mrb.getLowerValues().get(i)) {
         start = i;
         tmpOpen = candleList.get(i).getClose();
         position = false;
@@ -31,6 +32,8 @@ public class MRBandsStrat {
       }
     }
     List<Float> profitList = new ArrayList<>();
+    // System.out.println("candleSize > " + candleList.size() + " mrb size > " +
+    // mrb.getUpperValues().size());
     for (int i = start; i < candleList.size() - 2; i++) {
       if (position) {
         if (candleList.get(i).getClose() < mrb.getLowerValues().get(i)) {
@@ -60,7 +63,7 @@ public class MRBandsStrat {
     return profitList;
   }
 
-  public Trades mrbLongOnlyTrade(MRBands mrb, int window, List<Candlestick> candleList) {
+  public MRBandsTrades mrbLongOnlyTrade(MRBands mrb, int window, List<Candlestick> candleList) {
     int start = (int) (window * 1.5);
     float profit = 1.0f;
     boolean position = true;
@@ -70,7 +73,7 @@ public class MRBandsStrat {
         start = i;
         tmpOpen = candleList.get(i).getClose();
         break;
-      } else if (candleList.get(i).getClose() < mrb.getLowerValues().get(i)){
+      } else if (candleList.get(i).getClose() < mrb.getLowerValues().get(i)) {
         start = i;
         tmpOpen = candleList.get(i).getClose();
         position = false;
@@ -85,14 +88,16 @@ public class MRBandsStrat {
       if (position) {
         if (candleList.get(i).getClose() < mrb.getLowerValues().get(i)) {
           // close long go short;
-          profit = stratUtils.closeLongTrade(profit, tmpOpen, candleList.get(i).getClose(), tradePercentages, longPercentages);
+          profit = stratUtils.closeLongTrade(profit, tmpOpen, candleList.get(i).getClose(), tradePercentages,
+              longPercentages);
           profitList.add(profit);
           tmpOpen = candleList.get(i).getClose();
           position = false;
         }
       } else {
         if (candleList.get(i).getClose() > mrb.getUpperValues().get(i)) {
-          profit = stratUtils.closeShortTrade(profit, tmpOpen, candleList.get(i).getClose(), tradePercentages, shortPercentages);
+          profit = stratUtils.closeShortTrade(profit, tmpOpen, candleList.get(i).getClose(), tradePercentages,
+              shortPercentages);
           profitList.add(profit);
           tmpOpen = candleList.get(i).getClose();
           position = true;
@@ -101,13 +106,15 @@ public class MRBandsStrat {
     }
 
     if (position) {
-      profit = stratUtils.closeLongTrade(profit, tmpOpen, candleList.get(candleList.size() - 1).getClose(), tradePercentages, longPercentages);
+      profit = stratUtils.closeLongTrade(profit, tmpOpen, candleList.get(candleList.size() - 1).getClose(),
+          tradePercentages, longPercentages);
       profitList.add(profit);
     } else {
-      profit = stratUtils.closeShortTrade(profit, tmpOpen, candleList.get(candleList.size() - 1).getClose(), tradePercentages, shortPercentages);
+      profit = stratUtils.closeShortTrade(profit, tmpOpen, candleList.get(candleList.size() - 1).getClose(),
+          tradePercentages, shortPercentages);
       profitList.add(profit);
     }
-    Trades result = new Trades();
+    MRBandsTrades result = new MRBandsTrades();
     result.setWindow(window);
     result.setLongPercentages(longPercentages);
     result.setShortPercentages(shortPercentages);

@@ -10,18 +10,44 @@ public class RawData {
   List<Kijun> kijunList;
   List<List<List<Float>>> atrTrailingMultipliesList;
   List<Float> wList;
+  List<Ssma> ssmaList;
+  FractalsDefault fractalsDefault;
+  int start;
 
+  public int getStart() {
+    return this.start;
+  }
+
+  public void setStart(int start) {
+    this.start = start;
+  }
 
   public List<Float> getWList() {
     return this.wList;
+  }
+
+  public List<Ssma> getSsmaList() {
+    return this.ssmaList;
+  }
+
+  public void setSsmaList(List<Ssma> ssmaList) {
+    this.ssmaList = ssmaList;
+  }
+
+  public FractalsDefault getFractalsDefault() {
+    return this.fractalsDefault;
+  }
+
+  public void setFractalsDefault(FractalsDefault fractalsDefault) {
+    this.fractalsDefault = fractalsDefault;
   }
 
   public void setWList(List<Float> wList) {
     this.wList = wList;
   }
 
-
-  public RawData() {}
+  public RawData() {
+  }
 
   public List<List<List<Float>>> getAtrTrailingMultipliesList() {
     return this.atrTrailingMultipliesList;
@@ -70,5 +96,4 @@ public class RawData {
   public void setKijunList(List<Kijun> kijunList) {
     this.kijunList = kijunList;
   }
-  
 }

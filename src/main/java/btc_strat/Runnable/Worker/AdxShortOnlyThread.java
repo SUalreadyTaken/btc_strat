@@ -6,18 +6,19 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
-import btc_strat.Model.InputModel;
-import btc_strat.Model.Trades;
+import btc_strat.Model.Inputs.KijunAdxInput;
+import btc_strat.Model.Trades.KijunAdxTrades;
+import btc_strat.Model.Trades.Trades;
 import btc_strat.Strats.AdxStrat;
 
 public class AdxShortOnlyThread implements Runnable {
-  private BlockingQueue<InputModel> queue;
+  private BlockingQueue<KijunAdxInput> queue;
   private BlockingQueue<Integer> queueOut;
   private final int poisonPill;
-  private List<Trades> bestKijunADXLongList;
+  private List<KijunAdxTrades> bestKijunADXLongList;
 
-  public AdxShortOnlyThread(BlockingQueue<InputModel> queue, BlockingQueue<Integer> queueOut,
-      List<Trades> bestKijunADXLongList, int poisonPill) {
+  public AdxShortOnlyThread(BlockingQueue<KijunAdxInput> queue, BlockingQueue<Integer> queueOut,
+      List<KijunAdxTrades> bestKijunADXLongList, int poisonPill) {
     this.queue = queue;
     this.poisonPill = poisonPill;
     this.queueOut = queueOut;
@@ -28,28 +29,29 @@ public class AdxShortOnlyThread implements Runnable {
     AdxStrat adxStrat = new AdxStrat();
     try {
       while (true) {
-        InputModel apModel = queue.take();
+        KijunAdxInput apModel = queue.take();
         if (apModel.getPoisonPill() == this.poisonPill) {
           this.queueOut.put(1);
           return;
         }
         float bestProfit = -999;
-        List<Trades> tmpBestList = new ArrayList<>();
+        List<KijunAdxTrades> tmpBestList = new ArrayList<>();
 
-        for (int kijunCount = 10; kijunCount < apModel.getWholeKijunList().size(); kijunCount++) {
+        for (int kijunLen = 10; kijunLen < apModel.getWholeKijunList().size(); kijunLen++) {
           List<Float> adxList = apModel.getAdxList();
           for (int closeShortThreshold = 20; closeShortThreshold <= 50; closeShortThreshold++) {
             for (int threshold = 21; threshold < 55; threshold++) {
-              float tmpProfit = adxStrat.adxOnlyShortProfit(kijunCount, apModel.getWholeKijunList().get(kijunCount),
+              float tmpProfit = adxStrat.adxOnlyShortProfit(kijunLen, apModel.getWholeKijunList().get(kijunLen),
                   threshold, closeShortThreshold, apModel.getAdx(), adxList, apModel.getDiList(),
                   apModel.getCandleList());
               if (tmpProfit > bestProfit) {
                 bestProfit = tmpProfit;
-                Trades best = new Trades();
+                KijunAdxTrades best = new KijunAdxTrades();
                 best.setAdx(apModel.getAdx());
-                best.setAdxThreshold(threshold);
-                best.setCloseShortThreshold(closeShortThreshold);
-                best.setKijun(kijunCount);
+                // actually short entry
+                best.setLongThresh(threshold);
+                best.setExitThresh(closeShortThreshold);
+                best.setKijunLen(kijunLen);
                 best.setProfit(tmpProfit);
                 tmpBestList.add(best);
               }
@@ -64,7 +66,13 @@ public class AdxShortOnlyThread implements Runnable {
         }
 
       }
-    } catch (InterruptedException e) {
+    } catch (Exception e) {
+      System.err.println("🧨 got error in thread put 1 in queue.. will miss a lot of samples");
+      try {
+        this.queueOut.put(1);
+      } catch (InterruptedException e1) {
+        e1.printStackTrace();
+      }
       Thread.currentThread().interrupt();
     }
   }

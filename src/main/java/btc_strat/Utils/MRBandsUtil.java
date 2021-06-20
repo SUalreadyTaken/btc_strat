@@ -8,11 +8,6 @@ import btc_strat.Model.Candlestick;
 import btc_strat.Model.MRBands;
 import btc_strat.Model.MrResult;
 
-/**
- * From tradingview
- * Moving Regression Prediction Bands (MRBands)
-// © tbiktag
- */
 public class MRBandsUtil {
 
   public MRBands getBands(List<MrResult> mrResultList, float mult, int window) {
@@ -52,7 +47,6 @@ public class MRBandsUtil {
   }
 
   public MrResult mr(List<Float> _I, int index, List<Candlestick> candleList, int window, int degree) {
-
     List<Candlestick> _Y_raw = new ArrayList<>();
     for (int i = 0; i < window; i++) {
       _Y_raw.add(null);

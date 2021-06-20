@@ -8,7 +8,8 @@ import btc_strat.Model.Kijun;
 
 public class KijunUtil {
 
-  public KijunUtil() {}
+  public KijunUtil() {
+  }
 
   public Kijun calculateKijun(List<Candlestick> candlestickList, int dayCount) {
     float high = 0;
@@ -16,7 +17,6 @@ public class KijunUtil {
     int highIndex = 0;
     int lowIndex = 0;
     List<Float> result = new ArrayList<>();
-    
     for (int i = 0; i <= dayCount; i++) {
       if (candlestickList.get(i).getHigh() > high) {
         high = candlestickList.get(i).getHigh();
@@ -28,8 +28,8 @@ public class KijunUtil {
       }
       result.add(0F);
     }
-    
-    for (int i =  dayCount + 1; i < candlestickList.size(); i++) {
+
+    for (int i = dayCount + 1; i < candlestickList.size(); i++) {
       if (candlestickList.get(i).getLow() <= low) {
         low = candlestickList.get(i).getLow();
         lowIndex = dayCount - 1;

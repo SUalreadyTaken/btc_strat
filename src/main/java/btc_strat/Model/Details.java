@@ -14,6 +14,24 @@ public class Details {
   DecimalFormat df = new DecimalFormat("#.###");
   float couldTake;
   LocalDateTime peakeDate;
+  float adx;
+  float fractalTop;
+
+  public float getAdx() {
+    return this.adx;
+  }
+
+  public void setAdx(float adx) {
+    this.adx = adx;
+  }
+
+  public float getFractalTop() {
+    return this.fractalTop;
+  }
+
+  public void setFractalTop(float fractalTop) {
+    this.fractalTop = fractalTop;
+  }
 
   public Details(float open, float close, boolean position, LocalDateTime openDate, LocalDateTime closeDate, float pro,
       float percentage) {
@@ -102,10 +120,18 @@ public class Details {
     this.percentage = percentage;
   }
 
+  public String withAdxFractalToString() {
+    return "{" + " open:'" + getOpen() + "'" + ", close:'" + getClose() + "'" + ", pos:'" + isPosition() + "'"
+        + ", oDate:'" + getOpenDate() + "'" + ", cDate:'" + getCloseDate() + "'" + "'adx: " + getAdx() + "'frac:"
+        + getFractalTop() + "', pro:'" + df.format(getPro()) + "'" + ", per:'" + df.format(getPercentage()) + "'"
+        + ", perC:'" + df.format(getCouldTake()) + "'" + ", perC:'" + getPeakeDate() + "'" + "}";
+  }
+
   public String couldTaketoString() {
     return "{" + " open:'" + getOpen() + "'" + ", close:'" + getClose() + "'" + ", pos:'" + isPosition() + "'"
         + ", oDate:'" + getOpenDate() + "'" + ", cDate:'" + getCloseDate() + "'" + ", pro:'" + df.format(getPro()) + "'"
-        + ", per:'" + df.format(getPercentage()) + "'" + ", perC:'" + df.format(getCouldTake()) + "'" + ", perC:'" + getPeakeDate() + "'" + "}";
+        + ", per:'" + df.format(getPercentage()) + "'" + ", perC:'" + df.format(getCouldTake()) + "'" + ", perC:'"
+        + getPeakeDate() + "'" + "}";
   }
 
   @Override

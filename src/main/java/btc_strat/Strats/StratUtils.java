@@ -38,19 +38,12 @@ public class StratUtils {
       secondSecond += (profitList.get(i) - yMean) * (profitList.get(i) - yMean);
     }
     float secondHalf = (float) Math.sqrt(secondFirst * secondSecond);
-    // System.out.println("size: " + size + "xSum: " + xSum + "ySum: " + ySum +
-    // "xMean: " + xMean + "yMean: " + yMean
-    // + "firstHalf: " + firstHalf + "secondFirst: " + secondFirst + "secondSecond:
-    // " + secondSecond);
-    // System.out.println("conf: " + (firstHalf / secondHalf) * (firstHalf /
-    // secondHalf));
     return (firstHalf / secondHalf) * (firstHalf / secondHalf);
   }
 
   public float closeLongProfit(float profit, float open, float close) {
     float percentage = (close - open) / open;
     return ((float) (1 + (percentage - 0.0052))) * profit;
-    // return ((float) (1 + (percentage - 0.00075))) * profit;
   }
 
   public float closeShortProfit(float profit, float open, float close) {
@@ -63,9 +56,6 @@ public class StratUtils {
     float percentage = (close - open) / open;
     tradePercentages.add((percentage * 100) - 0.52f);
     longPercentages.add((percentage * 100) - 0.52f);
-    // tradePercentages.add(percentage * 100);
-    // longPercentages.add(percentage * 100);
-    // return ((float) (1 + (percentage - 0.00075))) * profit;
     return ((float) (1 + (percentage - 0.0052))) * profit;
   }
 
@@ -84,7 +74,6 @@ public class StratUtils {
       Position pos = positionList.get(i);
       float percentage = ((close - pos.getOpen()) / pos.getOpen()) / maxPortion;
       tmpProfit = ((float) (1 + (percentage - 0.0052))) * tmpProfit;
-      // tmpProfit = ((float) (1 + (percentage - 0.00075))) * tmpProfit;
     }
     positionList.clear();
     return tmpProfit;
@@ -97,7 +86,6 @@ public class StratUtils {
       Position pos = positionList.get(i);
       float percentage = ((close - pos.getOpen()) / pos.getOpen()) / maxPortion;
       tmpProfit = ((float) (1 - (percentage + 0.0052))) * tmpProfit;
-      // tmpProfit = ((float) (1 - (percentage + 0.00075))) * tmpProfit;
     }
     positionList.clear();
     return tmpProfit;
@@ -113,9 +101,6 @@ public class StratUtils {
       tradePercentages.add((percentage * 100) - 0.52f);
       longPercentages.add((percentage * 100) - 0.52f);
       tmpProfit = ((float) (1 + (percentage - 0.0052))) * tmpProfit;
-      // tradePercentages.add(percentage * 100);
-      // longPercentages.add(percentage * 100);
-      // tmpProfit = ((float) (1 + (percentage - 0.00075))) * tmpProfit;
     }
     positionList.clear();
     ;
@@ -132,9 +117,6 @@ public class StratUtils {
       tradePercentages.add(-(0.52f + (percentage * 100)));
       shortPercentages.add(-(0.52f + (percentage * 100)));
       tmpProfit = ((float) (1 - (percentage + 0.0052))) * tmpProfit;
-      // tradePercentages.add(-(percentage * 100));
-      // shortPercentages.add(-(percentage * 100));
-      // tmpProfit = ((float) (1 - (percentage + 0.00075))) * tmpProfit;
     }
     positionList.clear();
     return tmpProfit;
@@ -153,12 +135,8 @@ public class StratUtils {
 
       tradePercentages.add((percentage * 100) - 0.52f);
       longPercentages.add((percentage * 100) - 0.52f);
-      // tmpProfit = ((float) (1 + (percentage - 0.00075))) * tmpProfit;
-      // detailsList.add(new Details(pos.getOpen(), close, true, pos.getDate(),
-      // candle.getDate(), tmpProfit));
     }
     tmpProfit = ((float) (1 + (totalPercentage - 0.0052))) * tmpProfit;
-    // tmpProfit = ((float) (1 + (totalPercentage - 0.00075))) * tmpProfit;
     for (int i = 0; i < positionList.size(); i++) {
       PositionDetails pos = positionList.get(i);
       float percentage = ((close - pos.getOpen()) / pos.getOpen()) / maxPortion;
@@ -181,13 +159,9 @@ public class StratUtils {
       tradePercentages.add(-((percentage * 100) + 0.52f));
       shortPercentages.add(-((percentage * 100) + 0.52f));
       totalPercentage += percentage;
-      // tmpProfit = ((float) (1 - (percentage + 0.00075))) * tmpProfit;
-      // detailsList.add(new Details(pos.getOpen(), close, false, pos.getDate(),
-      // candle.getDate(), tmpProfit));
     }
 
     tmpProfit = ((float) (1 - (totalPercentage + 0.0052))) * tmpProfit;
-    // tmpProfit = ((float) (1 - (totalPercentage + 0.00075))) * tmpProfit;
     for (int i = 0; i < positionList.size(); i++) {
       PositionDetails pos = positionList.get(i);
       float percentage = ((close - pos.getOpen()) / pos.getOpen()) / maxPortion;
@@ -202,25 +176,17 @@ public class StratUtils {
       Candlestick candle, PositionDetails pos, float maxHigh, LocalDateTime peakeDate, List<Details> detailsList) {
 
     float tmpProfit = profit;
-    // float percentage = (candle.getClose() - pos.getOpen()) / pos.getOpen();
-    // tradePercentages.add(percentage * 100);
-    // longPercentages.add(percentage * 100);
-    // tmpProfit = ((float) (1 + (percentage - 0.00075))) * tmpProfit;
-
     float percentage = (candle.getClose() - pos.getOpen()) / pos.getOpen();
     tradePercentages.add((percentage * 100) - 0.52f);
     longPercentages.add((percentage * 100) - 0.52f);
     tmpProfit = ((float) (1 + (percentage - 0.0052))) * tmpProfit;
-    // TODO whereever i use it i could just save the open date.. no need to make a
+    // todo whereever i use it i could just save the open date.. no need to make a
     // PositionDetails
     Details d = new Details(pos.getOpen(), candle.getClose(), true, pos.getDate(), candle.getDate(), tmpProfit,
         percentage * 100);
     d.setCouldTake(((maxHigh - pos.getOpen()) / pos.getOpen()) * 100);
     d.setPeakeDate(peakeDate);
     detailsList.add(d);
-    // detailsList.add(new Details(pos.getOpen(), candle.getClose(), true,
-    // pos.getDate(), candle.getDate(), tmpProfit,
-    // percentage * 100));
 
     return tmpProfit;
   }
@@ -294,5 +260,23 @@ public class StratUtils {
       }
     }
     return lowest;
+  }
+
+  public float closeLongExtra(float profit, float close, float open, List<Float> tradePercentages,
+      List<Float> longPercentages) {
+
+    float percentage = ((close - open) / open);
+    tradePercentages.add(percentage * 100);
+    longPercentages.add(percentage * 100);
+    return (float) (1 + (percentage - 0.00075)) * profit;
+  }
+
+  public float closeShortExtra(float profit, float close, float open, List<Float> tradePercentages,
+      List<Float> shortPercentages) {
+
+    float percentage = ((close - open) / open);
+    tradePercentages.add(-(percentage * 100));
+    shortPercentages.add(-(percentage * 100));
+    return (float) (1 - (percentage + 0.00075)) * profit;
   }
 }

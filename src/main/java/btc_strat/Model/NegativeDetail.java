@@ -27,13 +27,9 @@ public class NegativeDetail {
     this.date = date;
   }
 
-
   @Override
   public String toString() {
-    return "{" +
-      " negative='" + getNegative() + "'" +
-      ", date='" + getDate() + "'" +
-      "}";
+    return "{" + " negative='" + getNegative() + "'" + ", date='" + getDate() + "'" + "}";
   }
 
 }

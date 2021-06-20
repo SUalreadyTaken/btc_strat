@@ -8,12 +8,8 @@ import btc_strat.Model.DI;
 
 public class ADXutil {
   public List<Float> getAdx(int n, List<Candlestick> candlestickList) {
-    // FIXME could change some to tmpPrevious and make it nicer but this will do for now
-    // List<Float> result = new ArrayList<>();
     List<Float> tr = new ArrayList<>();
     List<Float> atr = new ArrayList<>();
-    // List<Float> upMove = new ArrayList<>();
-    // List<Float> downMove = new ArrayList<>();
     List<Float> dxPos = new ArrayList<>();
     List<Float> dxNeg = new ArrayList<>();
     List<Float> smoothDxPos = new ArrayList<>();
@@ -22,7 +18,6 @@ public class ADXutil {
     List<Float> negDMI = new ArrayList<>();
     List<Float> dx = new ArrayList<>();
     List<Float> adx = new ArrayList<>();
-   
     tr.add(0F);
     dxPos.add(0F);
     dxNeg.add(0F);
@@ -87,29 +82,25 @@ public class ADXutil {
     }
 
     // adx(29) = avg(dx(15-28))
-    for (int i = 0; i < n*2; i++) {
+    for (int i = 0; i < n * 2; i++) {
       adx.add(0F);
     }
     float tmpAdx = 0F;
-    for (int i = n; i < n*2; i++) {
-      tmpAdx+= dx.get(i);
+    for (int i = n; i < n * 2; i++) {
+      tmpAdx += dx.get(i);
     }
     adx.add(tmpAdx / n);
     // adx(30) = (adx(29) * (n-1) + dx(30)) / n
-    for (int i = (n*2)+1; i < candlestickList.size(); i++) {
-      adx.add((adx.get(i - 1) * (n-1) + dx.get(i)) / n);
+    for (int i = (n * 2) + 1; i < candlestickList.size(); i++) {
+      adx.add((adx.get(i - 1) * (n - 1) + dx.get(i)) / n);
     }
     return adx;
 
   }
 
   public DI getDI(int n, List<Candlestick> candlestickList) {
-    // FIXME could change some to tmpPrevious and make it nicer but this will do for now
-    // List<Float> result = new ArrayList<>();
     List<Float> tr = new ArrayList<>();
     List<Float> atr = new ArrayList<>();
-    // List<Float> upMove = new ArrayList<>();
-    // List<Float> downMove = new ArrayList<>();
     List<Float> dxPos = new ArrayList<>();
     List<Float> dxNeg = new ArrayList<>();
     List<Float> smoothDxPos = new ArrayList<>();
@@ -117,8 +108,6 @@ public class ADXutil {
     List<Float> posDMI = new ArrayList<>();
     List<Float> negDMI = new ArrayList<>();
     List<Float> dx = new ArrayList<>();
-    // List<Float> adx = new ArrayList<>();
-   
     tr.add(0F);
     dxPos.add(0F);
     dxNeg.add(0F);
@@ -189,7 +178,6 @@ public class ADXutil {
         positiveOver.add(false);
       }
     }
-
 
     return new DI(posDMI, negDMI, positiveOver);
   }

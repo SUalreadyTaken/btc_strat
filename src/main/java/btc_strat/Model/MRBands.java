@@ -6,7 +6,6 @@ public class MRBands {
   List<Float> upperValues;
   List<Float> lowerValues;
 
-
   public MRBands(List<Float> upperValues, List<Float> lowerValues) {
     this.upperValues = upperValues;
     this.lowerValues = lowerValues;

@@ -26,5 +26,4 @@ public class Kijun {
   public void setIsOverCloseList(List<Boolean> isOverCloseList) {
     this.isOverCloseList = isOverCloseList;
   }
-  
 }

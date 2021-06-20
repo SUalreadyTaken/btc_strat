@@ -5,7 +5,6 @@ public class MrResult {
   float _Y_f;
   float _err;
 
-
   public MrResult(float _Y, float _Y_f, float _err) {
     this._Y = _Y;
     this._Y_f = _Y_f;
@@ -35,6 +34,5 @@ public class MrResult {
   public void set_err(float _err) {
     this._err = _err;
   }
-  
 
 }

@@ -6,7 +6,6 @@ public class Canal {
   List<Float> lowerCanalList;
   List<Float> higherCanalList;
 
-
   public Canal(List<Float> lowerCanalList, List<Float> higherCanalList) {
     this.lowerCanalList = lowerCanalList;
     this.higherCanalList = higherCanalList;
